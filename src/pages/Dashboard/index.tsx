@@ -24,9 +24,9 @@ interface Transaction {
 }
 
 interface Balance {
-  income: number;
-  outcome: number;
-  total: number;
+  income: string;
+  outcome: string;
+  total: string;
 }
 
 const Dashboard: React.FC = () => {
@@ -35,6 +35,7 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     async function loadTransactions(): Promise<void> {
+      
       const response = await api.get('/transactions');
 
       const transactionsFormatted = response.data.transactions.map(
@@ -52,7 +53,7 @@ const Dashboard: React.FC = () => {
       };
 
       setTransactions(transactionsFormatted);
-      setBalance(response.data.balance);
+      setBalance(balanceFormatted);
 
     }
 
@@ -100,7 +101,7 @@ const Dashboard: React.FC = () => {
 
             <tbody>
               {transactions.map(transaction =>(
-                <tr>
+                <tr key={transaction.id}>
                   <td className="title">{transaction.title}</td>
                   <td className={transaction.type}>
                     {transaction.type == 'outcome' && ' - '}
